@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Exports\EmployeeContactExport;
 use App\Models\dawah_exp;
+use App\Models\employeetask;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
- use Excel;
+// use Excel;
+use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Brian2694\Toastr\Facades\Toastr;
@@ -15,11 +19,10 @@ use App\Models\islamic_edu;
 use App\Models\User;
 use App\Models\module_permission;
 use App\Models\ycm_job;
-// use Barryvdh\DomPDF\Facade as PDF
-use Exception;
-use Illuminate\Support\Facades\Date;
+use Image;
 
-class EmployeeController extends Controller
+
+class  EmployeeController extends Controller
 {
     public $user;
 
@@ -39,16 +42,12 @@ class EmployeeController extends Controller
             abort(403, 'Sorry !! You are Unauthorized !');
         }
 
-        $users = DB::table('users')
-        ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-        ->select('users.*', 'employees.birth_date', 'employees.gender',)
-        ->get();
-    $ycm=DB::table('Employees')->get();
-$userList = DB::table('users')->get();
 
+    //  $ycm=DB::table('Employees')->get();
+    $ycm=Employee::get();
 
-        // return view('form.allemployeecard',compact('users','userList','permission_lists'));
         return view('form.allemployeecard',compact('ycm'));
+
 
     }
     // all employee list
@@ -57,10 +56,7 @@ $userList = DB::table('users')->get();
         if (is_null($this->user) || !$this->user->can('YCM.view')) {
             abort(403, 'Sorry !! You are Unauthorized !');
         }
-        $users = DB::table('users')
-                    ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                    ->select('users.*', 'employees.birth_date', 'employees.gender')
-                    ->get();
+
         $userList = DB::table('users')->get();
         $ycm=DB::table('Employees')->get();
 
@@ -99,31 +95,39 @@ $userList = DB::table('users')->get();
             'qu_fod' =>'required|string',
             "job_position.*" => 'max:50|min:3',
             "job_instituion.*" => 'max:50|min:3',
-            "job_from.*" => 'date_format:Y-m-d|before:today',
-             "job_to.*" => 'date_format:Y-m-d|before:today',
+            "job_from.*" => '|before:today',
+             "job_to.*" => '|before:today',
              "dawah_position.*" => 'max:50|min:3',
             "dawah_institute.*" => 'max:50',
-            "dawah_from.*" => 'date_format:Y-m-d|before:today',
-            "dawah_to.*" =>'date_format:Y-m-d|before:today',
+            "dawah_from.*" => '|before:today',
+            "dawah_to.*" =>'|before:today',
             "volunteer" =>'required',
             "Desgination" => 'required|max:50|min:3',
             "Chapter" => 'required|max:50|min:3',
         ], );
 
-
+if($request->hasFile('avatar')){
+    $avatar=$request->file('avatar');
+    $filename=time().'.'. $avatar->getClientOriginalExtension();
+    Image::make($avatar)->save(public_path('/images/ycmimages/').'/'.$filename);
+}
             $data = $request->input();
-
 
                     $employees = Employee::where('email', '=',$request->email)->first();
                     if ($employees === null)
                      {
+                        
                         $employee = new Employee;
+                        $employee->avatar=$filename;
+                        // dd($filename);
+
                         $ycm_job =new ycm_job;
                         $islamic_edu =new islamic_edu;
                         $islamic_course=$request->Islamic_course;
                         $job_position= $request->job_position;
                         $dawah= new dawah_exp;
                         $dawah_position= $request->dawah_position;
+                        // $employee->avatar = $request->file->hasName('avatar');
                         $employee->name       = $data['name'];
                         $employee->lname      = $data['lname'];
                         $employee->status      ="Active";
@@ -140,8 +144,6 @@ $userList = DB::table('users')->get();
                         $employee->qualification=$request->qualification;
                         $employee->institute=$request->qu_insitute;
                         $employee->field_of_study=$request->qu_fod;
-
-
                         $employee->designation= $request->Desgination;
                         $employee->save();
 
@@ -191,7 +193,7 @@ $userList = DB::table('users')->get();
 
                     else {
                         DB::rollback();
-                        Toastr::error('Add new employee exits :)','Error');
+                        Toastr::error('new employee exits :)','Error');
                         return redirect()->back();
                     }
                 // }
@@ -217,6 +219,7 @@ public function updateycm(Request $request, $id){
 
     $request->validate([
         'name'        => 'required|string|max:50|min:3',
+        // 'cnic'        => 'required|string|max:13|min:13',
         'lname'       => 'required|string|max:50|min:3',
         'address'       => 'required|max:50|min:3',
         'city'       => 'required|max:50|min:3',
@@ -258,6 +261,8 @@ public function updateycm(Request $request, $id){
                     $dawah_position= $request->dawah_position;
                     $employee->name       = $data['name'];
                     $employee->lname      = $data['lname'];
+                    $employee->cnic  = $data['cnic'];
+
                     $employee->status      ="Active";
                     $employee->address    = $request->address;
                     $employee->city       = $request->city;
@@ -312,7 +317,7 @@ public function updateycm(Request $request, $id){
                         DB::table('dawah_exps')->update($datasaveDawah);
                     }
 
-                    Toastr::success('employee added successfully :)','Success');
+                    Toastr::success('employee updated] successfully :)','Success');
                     return redirect()->route('all/employee/card');
 
 
@@ -323,6 +328,7 @@ public function updateycm(Request $request, $id){
     // view edit record
     public function viewRecord($employee_id)
     {
+
         $islamic=DB::table('islamic_edus')->where('ycm_id',$employee_id)->get();
         $dawah=DB::table('dawah_exps')->where('ycm_id',$employee_id)->get();
         $job= DB::table('ycm_jobs')->where('ycm_id',$employee_id)->get();
@@ -333,18 +339,35 @@ public function updateycm(Request $request, $id){
         return view('form.edit.editemployee',compact('employees','job','islamic','dawah'));
     }
 
-//     // public function viewPDF($employee_id){
-//     //     $islamic=DB::table('islamic_edus')->where('ycm_id',$employee_id)->get();
-//     //     $dawah=DB::table('dawah_exps')->where('ycm_id',$employee_id)->get();
-//     //     $job= DB::table('ycm_jobs')->where('ycm_id',$employee_id)->get();
-//     //     $employees = DB::table('employees')->where('id',$employee_id)->get();
-//     //     $dompdf=PDF::loadView('form.edit.editemployee',compact('employees','job','islamic','dawah'));
-//     //     $dompdf->setPaper('A4', 'potrait');
+
+
+public function ycmtask(){
+    $task= DB::table('employeetasks')->get();
+
+    $employee = Employee::where('id', '=',$task[0]->ycm_id)->get();
+
+    return view('ycmtask.ycmtasklist',compact('task','employee'));
+
+}
+public function assigntaskform($id){
+    return view('ycmtask.assigntaskform',compact('id'));
+}
+
+public function storetask(Request $req, $id){
 
 
 
-// $dompdf->stream();
-//     }
+    $req->validate([
+        'task' => 'required|max:100|',
+        'duedate' => 'required',
+    ],);
+
+    // Process Data
+    $role = employeetask::create(['ycm_id' => $id, 'task' => $req->task, 'date'=> $req->duedate,'status' => 'In Process']);
+
+    session()->flash('success', 'Role has been created !!');
+    return redirect('/ycmtasks');
+}
     public function OfferContract($employee_id)
     {
      $employees = DB::table('employees')->where('id',$employee_id)->first();
@@ -444,7 +467,6 @@ public function updateycm(Request $request, $id){
         try{
 
             Employee::where('employee_id',$employee_id)->delete();
-            module_permission::where('employee_id',$employee_id)->delete();
 
             DB::commit();
             Toastr::success('Delete record successfully :)','Success');
@@ -461,83 +483,73 @@ public function updateycm(Request $request, $id){
 
     public function employeeSearch(Request $request)
     {
-        $users = DB::table('users')
-                    ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                    ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                    ->get();
-        $permission_lists = DB::table('permission_lists')->get();
-        $userList = DB::table('users')->get();
+        $ycm= DB::table('employees')->get();
+      
 
         // search by id
         if($request->employee_id)
         {
-            $users = DB::table('users')
-                        ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
+            $ycm= DB::table('employees')
+                        ->where('id','LIKE','%'.$request->employee_id.'%')
                         ->get();
         }
         // search by name
         if($request->name)
         {
-            $users = DB::table('users')
-                        ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
+            $ycm = DB::table('employees')
+                        ->where('name','LIKE','%'.$request->name.'%')
                         ->get();
         }
         // search by name
         if($request->position)
         {
-            $users = DB::table('users')
-                        ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
+            $ycm = DB::table('employees')
+                        ->where('designation','LIKE','%'.$request->position.'%')
                         ->get();
         }
 
-        // search by name and id
-        if($request->employee_id && $request->name)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->get();
-        }
-        // search by position and id
-        if($request->employee_id && $request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-        // search by name and position
-        if($request->name && $request->position)
-        {
-            $users = DB::table('users')
-                        ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                        ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                        ->where('users.name','LIKE','%'.$request->name.'%')
-                        ->where('users.position','LIKE','%'.$request->position.'%')
-                        ->get();
-        }
-         // search by name and position and id
-         if($request->employee_id && $request->name && $request->position)
-         {
-             $users = DB::table('users')
-                         ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
-                         ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
-                         ->where('employee_id','LIKE','%'.$request->employee_id.'%')
-                         ->where('users.name','LIKE','%'.$request->name.'%')
-                         ->where('users.position','LIKE','%'.$request->position.'%')
-                         ->get();
-         }
-        return view('form.allemployeecard',compact('users','userList','permission_lists'));
+        // // search by name and id
+        // if($request->employee_id && $request->name)
+        // {
+        //     $users = DB::table('users')
+        //                 ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
+        //                 ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
+        //                 ->where('employee_id','LIKE','%'.$request->employee_id.'%')
+        //                 ->where('users.name','LIKE','%'.$request->name.'%')
+        //                 ->get();
+        // }
+        // // search by position and id
+        // if($request->employee_id && $request->position)
+        // {
+        //     $users = DB::table('users')
+        //                 ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
+        //                 ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
+        //                 ->where('employee_id','LIKE','%'.$request->employee_id.'%')
+        //                 ->where('users.position','LIKE','%'.$request->position.'%')
+        //                 ->get();
+        // }
+        // // search by name and position
+        // if($request->name && $request->position)
+        // {
+        //     $users = DB::table('users')
+        //                 ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
+        //                 ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
+        //                 ->where('users.name','LIKE','%'.$request->name.'%')
+        //                 ->where('users.position','LIKE','%'.$request->position.'%')
+        //                 ->get();
+        // }
+        //  // search by name and position and id
+        //  if($request->employee_id && $request->name && $request->position)
+        //  {
+        //      $users = DB::table('users')
+        //                  ->join('employees', 'users.rec_id', '=', 'employees.employee_id')
+        //                  ->select('users.*', 'employees.birth_date', 'employees.gender', 'employees.company')
+        //                  ->where('employee_id','LIKE','%'.$request->employee_id.'%')
+        //                  ->where('users.name','LIKE','%'.$request->name.'%')
+        //                  ->where('users.position','LIKE','%'.$request->position.'%')
+        //                  ->get();
+        //  }
+        return view('form.allemployeecard',compact('ycm'));
     }
     public function employeeListSearch(Request $request)
     {
@@ -621,15 +633,16 @@ public function updateycm(Request $request, $id){
     }
 
     // employee profile
-    public function profileEmployee($rec_id)
+    public function profileEmployee($id)
     {
-        $users = DB::table('profile_information')
-                ->join('users', 'users.rec_id', '=', 'profile_information.rec_id')
-                ->select('profile_information.*', 'users.*')
-                ->where('profile_information.rec_id','=',$rec_id)
-                ->first();
+        $emp=Employee::select("*")
+        ->where("id", "=", $id)
+        ->first();
 
-        $user = DB::table('users')->where('rec_id',$rec_id)->get();
-        return view('form.employeeprofile',compact('user','users'));
+        $jobs=$emp->ycmjob()->get();
+        $dawahs=$emp->dawah()->get();
+
+
+        return view('form.employeeprofile',compact('emp','jobs','dawahs'));
     }
 }

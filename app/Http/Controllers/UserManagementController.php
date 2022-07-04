@@ -7,6 +7,9 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Employee;
+use Spatie\Permission\Models\Role;
+
+use Spatie\Permission\Models\Permission;
 use App\Models\Form;
 use App\Models\ProfileInformation;
 use App\Rules\MatchOldPassword;
@@ -17,23 +20,127 @@ use Illuminate\Support\Facades\Hash;
 
 class UserManagementController extends Controller
 {
+    public $user;
+
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
+    }
+
+
     public function index()
     {
-        if (Auth::user()->role_name=='Admin')
-        {
-            $result      = DB::table('users')->get();
-            $role_name   = DB::table('role_type_users')->get();
-            $position    = DB::table('position_types')->get();
-            $department  = DB::table('departments')->get();
-            $status_user = DB::table('user_types')->get();
-            return view('usermanagement.user_control',compact('result','role_name','position','department','status_user'));
+
+        if (is_null($this->user) || !$this->user->can('user.view')) {
+            abort(403, 'Sorry !! You are Unauthorized !');
         }
-        else
-        {
-            return redirect()->route('home');
+        $users = User::all();
+      return view('usermanagement.userindex', compact('users'));
+    }
+
+    public function createuser(){
+        if (is_null($this->user) || !$this->user->can('user.create')) {
+            abort(403, 'Sorry !! You are Unauthorized !');
+        }
+        $roles  = Role::all();
+        return view('usermanagement.createuserform', compact('roles'));
+    }
+
+    public function store(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('user.create')) {
+            abort(403, 'Sorry !! You are Unauthorized !');
+        }
+        // Validation Data
+        $request->validate([
+            'name' => 'required|max:50',
+            'email' => 'required|max:100|email|unique:users',
+            'password' => 'required|min:6|confirmed',
+        ]);
+        $dt       = Carbon::now();
+        $todayDate = $dt->toDayDateTimeString();
+
+        // Create New User
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->join_date    = $todayDate;
+        $user->save();
+
+
+        if ($request->roles) {
+
+        $user->assignRole($request->roles);
+        }
+        session()->flash('success', 'User has been created !!');
+        return redirect('/users');
+    }
+
+//edit user
+
+public function edit($id)
+{
+    if (is_null($this->user) || !$this->user->can('user.edit')) {
+        abort(403, 'Sorry !! You are Unauthorized !');
+    }
+    $user = User::find($id);
+    $roles  = Role::all();
+    return view('usermanagement.useredit', compact('user', 'roles'));
+}
+
+public function update(Request $request, $id)
+    {
+        if (is_null($this->user) || !$this->user->can('user.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized !');
         }
 
+        // Create New User
+        $user = User::find($id);
+
+        // Validation Data
+        $request->validate([
+            'name' => 'required|max:50',
+            'email' => 'required|max:100|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+
+        $user->roles()->detach();
+        if ($request->roles) {
+            $user->assignRole($request->roles);
+        }
+
+        session()->flash('success', 'User has been updated !!');
+        return redirect('/users');
     }
+
+    public function destroy($id)
+    {
+        if (is_null($this->user) || !$this->user->can('user.delete')) {
+            abort(403, 'Sorry !! You are Unauthorized !');
+        }
+        $user = User::find($id);
+        if (!is_null($user)) {
+            $user->delete();
+        }
+
+        session()->flash('success', 'User has been deleted !!');
+        return back();
+    }
+
+
     // search user
     public function searchUser(Request $request)
     {
@@ -252,75 +359,75 @@ class UserManagementController extends Controller
     }
 
     // update
-    public function update(Request $request)
-    {
-        DB::beginTransaction();
-        try{
-            $rec_id       = $request->rec_id;
-            $name         = $request->name;
-            $email        = $request->email;
-            $role_name    = $request->role_name;
-            $position     = $request->position;
-            $phone        = $request->phone;
-            $department   = $request->department;
-            $status       = $request->status;
+    // public function update(Request $request)
+    // {
+    //     DB::beginTransaction();
+    //     try{
+    //         $rec_id       = $request->rec_id;
+    //         $name         = $request->name;
+    //         $email        = $request->email;
+    //         $role_name    = $request->role_name;
+    //         $position     = $request->position;
+    //         $phone        = $request->phone;
+    //         $department   = $request->department;
+    //         $status       = $request->status;
 
-            $dt       = Carbon::now();
-            $todayDate = $dt->toDayDateTimeString();
-            $image_name = $request->hidden_image;
-            $image = $request->file('images');
-            if($image_name =='photo_defaults.jpg')
-            {
-                if($image != '')
-                {
-                    $image_name = rand() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('/assets/images/'), $image_name);
-                }
-            }
-            else{
+    //         $dt       = Carbon::now();
+    //         $todayDate = $dt->toDayDateTimeString();
+    //         $image_name = $request->hidden_image;
+    //         $image = $request->file('images');
+    //         if($image_name =='photo_defaults.jpg')
+    //         {
+    //             if($image != '')
+    //             {
+    //                 $image_name = rand() . '.' . $image->getClientOriginalExtension();
+    //                 $image->move(public_path('/assets/images/'), $image_name);
+    //             }
+    //         }
+    //         else{
 
-                if($image != '')
-                {
-                    $image_name = rand() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('/assets/images/'), $image_name);
-                }
-            }
+    //             if($image != '')
+    //             {
+    //                 $image_name = rand() . '.' . $image->getClientOriginalExtension();
+    //                 $image->move(public_path('/assets/images/'), $image_name);
+    //             }
+    //         }
 
-            $update = [
+    //         $update = [
 
-                'rec_id'       => $rec_id,
-                'name'         => $name,
-                'role_name'    => $role_name,
-                'email'        => $email,
-                'position'     => $position,
-                'phone_number' => $phone,
-                'department'   => $department,
-                'status'       => $status,
-                'avatar'       => $image_name,
-            ];
+    //             'rec_id'       => $rec_id,
+    //             'name'         => $name,
+    //             'role_name'    => $role_name,
+    //             'email'        => $email,
+    //             'position'     => $position,
+    //             'phone_number' => $phone,
+    //             'department'   => $department,
+    //             'status'       => $status,
+    //             'avatar'       => $image_name,
+    //         ];
 
-            $activityLog = [
-                'user_name'    => $name,
-                'email'        => $email,
-                'phone_number' => $phone,
-                'status'       => $status,
-                'role_name'    => $role_name,
-                'modify_user'  => 'Update',
-                'date_time'    => $todayDate,
-            ];
+    //         $activityLog = [
+    //             'user_name'    => $name,
+    //             'email'        => $email,
+    //             'phone_number' => $phone,
+    //             'status'       => $status,
+    //             'role_name'    => $role_name,
+    //             'modify_user'  => 'Update',
+    //             'date_time'    => $todayDate,
+    //         ];
 
-            DB::table('user_activity_logs')->insert($activityLog);
-            User::where('rec_id',$request->rec_id)->update($update);
-            DB::commit();
-            Toastr::success('User updated successfully :)','Success');
-            return redirect()->route('userManagement');
+    //         DB::table('user_activity_logs')->insert($activityLog);
+    //         User::where('rec_id',$request->rec_id)->update($update);
+    //         DB::commit();
+    //         Toastr::success('User updated successfully :)','Success');
+    //         return redirect()->route('userManagement');
 
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('User update fail :)','Error');
-            return redirect()->back();
-        }
-    }
+    //     }catch(\Exception $e){
+    //         DB::rollback();
+    //         Toastr::error('User update fail :)','Error');
+    //         return redirect()->back();
+    //     }
+    // }
     // delete
     public function delete(Request $request)
     {

@@ -25,6 +25,7 @@ $app = new Illuminate\Foundation\Application(
 | incoming requests to this application from both the web and CLI.
 |
 */
+date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
-use PDF;
 use App\Models\User;
 class HomeController extends Controller
 {
@@ -28,8 +28,10 @@ class HomeController extends Controller
     public function index()
     {
         $dt        = Carbon::now();
+        $user=   DB::table('users')->get();
+        $user=count($user);
         $todayDate = $dt->toDayDateTimeString();
-        return view('dashboard.dashboard',compact('todayDate'));
+        return view('dashboard.dashboard',compact('todayDate','user'));
     }
     // employee dashboard
     public function emDashboard()

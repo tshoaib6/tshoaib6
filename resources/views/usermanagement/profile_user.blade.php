@@ -1,145 +1,7 @@
 @extends('layouts.master')
 @section('content')
 
-	<!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-inner slimscroll">
-            <div id="sidebar-menu" class="sidebar-menu">
-                <ul>
-                    <li class="menu-title">
-                        <span>Main</span>
-                    </li>
-                    <li class="submenu">
-                        <a href="#"><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="{{ route('home') }}">Admin Dashboard</a></li>
-                            <li><a href="{{ route('em/dashboard') }}">Employee Dashboard</a></li>
-                        </ul>
-                    </li>
-                    @if (Auth::user()->role_name=='Admin')
-                        <li class="menu-title"> <span>Authentication</span> </li>
-                        <li class="submenu">
-                            <a href="#" class="noti-dot">
-                                <i class="la la-user-secret"></i> <span> User Controller</span> <span class="menu-arrow"></span>
-                            </a>
-                            <ul style="display: none;">
-                                <li><a class="active" href="{{ route('userManagement') }}">All User</a></li>
-                                <li><a href="{{ route('activity/log') }}">Activity Log</a></li>
-                                <li><a href="{{ route('activity/login/logout') }}">Activity User</a></li>
-                            </ul>
-                        </li>
-                    @endif
-                    <li class="menu-title"> <span>Employees</span> </li>
-                    <li class="submenu">
-                        <a href="#" class="noti-dot">
-                            <i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span>
-                        </a>
-                        <ul style="display: none;">
-                            <li><a href="{{ route('all/employee/card') }}">All Employees</a></li>
-                            <li><a href="{{ route('form/holidays/new') }}">Holidays</a></li>
-                            <li><a href="{{ route('form/leaves/new') }}">Leaves (Admin) 
-                                <span class="badge badge-pill bg-primary float-right">1</span></a>
-                            </li>
-                            <li><a href="{{route('form/leavesemployee/new')}}">Leaves (Employee)</a></li>
-                            <li><a href="{{ route('form/leavesettings/page') }}">Leave Settings</a></li>
-                            <li><a href="{{ route('attendance/page') }}">Attendance (Admin)</a></li>
-                            <li><a href="{{ route('attendance/employee/page') }}">Attendance (Employee)</a></li>
-                            <li><a href="departments.html">Departments</a></li>
-                            <li><a href="designations.html">Designations</a></li>
-                            <li><a href="timesheet.html">Timesheet</a></li>
-                            <li><a href="shift-scheduling.html">Shift & Schedule</a></li>
-                            <li><a href="overtime.html">Overtime</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-title"> <span>HR</span> </li>
-                    <li class="submenu">
-                        <a href="#">
-                            <i class="la la-files-o"></i>
-                            <span> Sales </span> 
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul style="display: none;">
-                            <li><a href="estimates.html">Estimates</a></li>
-                            <li><a href="{{ route('form/invoice/view/page') }}">Invoices</a></li>
-                            <li><a href="payments.html">Payments</a></li>
-                            <li><a href="expenses.html">Expenses</a></li>
-                            <li><a href="provident-fund.html">Provident Fund</a></li>
-                            <li><a href="taxes.html">Taxes</a></li>
-                        </ul>
-                    </li>
-                    <li class="submenu"> <a href="#"><i class="la la-money"></i>
-                        <span> Payroll </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="{{ route('form/salary/page') }}"> Employee Salary </a></li>
-                            <li><a href="{{ url('form/salary/view') }}"> Payslip </a></li>
-                            <li><a href="{{ route('form/payroll/items') }}"> Payroll Items </a></li>
-                        </ul>
-                    </li>
-                    <li class="submenu"> <a href="#"><i class="la la-pie-chart"></i>
-                        <span> Reports </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="{{ route('form/expense/reports/page') }}"> Expense Report </a></li>
-                            <li><a href="{{ route('form/invoice/reports/page') }}"> Invoice Report </a></li>
-                            <li><a href="payments-reports.html"> Payments Report </a></li>
-                            <li><a href="employee-reports.html"> Employee Report </a></li>
-                            <li><a href="payslip-reports.html"> Payslip Report </a></li>
-                            <li><a href="attendance-reports.html"> Attendance Report </a></li>
-                            <li><a href="{{ route('form/leave/reports/page') }}"> Leave Report </a></li>
-                            <li><a href="{{ route('form/daily/reports/page') }}"> Daily Report </a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-title"> <span>Performance</span> </li>
-                    <li class="submenu"> <a href="#"><i class="la la-graduation-cap"></i>
-                        <span> Performance </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="performance-indicator.html"> Performance Indicator </a></li>
-                            <li><a href="performance.html"> Performance Review </a></li>
-                            <li><a href="performance-appraisal.html"> Performance Appraisal </a></li>
-                        </ul>
-                    </li>
-                    <li class="submenu"> <a href="#"><i class="la la-edit"></i>
-                        <span> Training </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="training.html"> Training List </a></li>
-                            <li><a href="trainers.html"> Trainers</a></li>
-                            <li><a href="training-type.html"> Training Type </a></li>
-                        </ul>
-                    </li>
-                    <li><a href="promotion.html"><i class="la la-bullhorn"></i> <span>Promotion</span></a></li>
-                    <li><a href="resignation.html"><i class="la la-external-link-square"></i> <span>Resignation</span></a></li>
-                    <li><a href="termination.html"><i class="la la-times-circle"></i> <span>Termination</span></a></li>
-                    <li class="menu-title"> <span>Administration</span> </li>
-                    <li> <a href="assets.html"><i class="la la-object-ungroup">
-                        </i> <span>Assets</span></a>
-                    </li>
-                    <li class="submenu"> <a href="#"><i class="la la-briefcase"></i>
-                        <span> Jobs </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="user-dashboard.html"> User Dasboard </a></li>
-                            <li><a href="jobs-dashboard.html"> Jobs Dasboard </a></li>
-                            <li><a href="jobs.html"> Manage Jobs </a></li>
-                            <li><a href="manage-resumes.html"> Manage Resumes </a></li>
-                            <li><a href="shortlist-candidates.html"> Shortlist Candidates </a></li>
-                            <li><a href="interview-questions.html"> Interview Questions </a></li>
-                            <li><a href="offer_approvals.html"> Offer Approvals </a></li>
-                            <li><a href="experiance-level.html"> Experience Level </a></li>
-                            <li><a href="candidates.html"> Candidates List </a></li>
-                            <li><a href="schedule-timing.html"> Schedule timing </a></li>
-                            <li><a href="apptitude-result.html"> Aptitude Results </a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-title"> <span>Pages</span> </li>
-                    <li class="submenu">
-                        <a href="#"><i class="la la-user"></i> <span> Profile </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a class="active" href="{{ route('profile_user') }}"> Employee Profile </a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-	<!-- /Sidebar -->
+
 
     <div class="page-wrapper">
         <!-- Page Content -->
@@ -178,7 +40,7 @@
                                                 <small class="text-muted">{{ Auth::user()->position }}</small>
                                                 <div class="staff-id">Employee ID : {{ Auth::user()->rec_id }}</div>
                                                 <div class="small doj text-muted">Date of Join : {{ Auth::user()->join_date }}</div>
-                                                <div class="staff-msg"><a class="btn btn-custom" href="chat.html">Send Message</a></div>
+                                                {{-- <div class="staff-msg"><a class="btn btn-custom" href="chat.html">Send Message</a></div> --}}
                                             </div>
                                         </div>
                                         <div class="col-md-7">
@@ -258,7 +120,7 @@
                                                             </a>
                                                         </div>
                                                     </li>
-                                                @endif    
+                                                @endif
                                             </ul>
                                         </div>
                                     </div>
@@ -269,7 +131,7 @@
                     </div>
                 </div>
             </div>
-					
+
             <div class="card tab-box">
                 <div class="row user-tabs">
                     <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
@@ -281,7 +143,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-content">
                 <!-- Profile Info Tab -->
                 <div id="emp_profile" class="pro-overview tab-pane fade show active">
@@ -291,38 +153,9 @@
                                 <div class="card-body">
                                     <h3 class="card-title">Personal Informations <a href="#" class="edit-icon" data-toggle="modal" data-target="#personal_info_modal"><i class="fa fa-pencil"></i></a></h3>
                                     <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Passport No.</div>
-                                            <div class="text">9876543210</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Passport Exp Date.</div>
-                                            <div class="text">9876543210</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Tel</div>
-                                            <div class="text"><a href="">9876543210</a></div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Nationality</div>
-                                            <div class="text">Indian</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Religion</div>
-                                            <div class="text">Christian</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Marital status</div>
-                                            <div class="text">Married</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Employment of spouse</div>
-                                            <div class="text">No</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">No. of children</div>
-                                            <div class="text">2</div>
-                                        </li>
+
+
+
                                     </ul>
                                 </div>
                             </div>
@@ -333,34 +166,7 @@
                                     <h3 class="card-title">Emergency Contact <a href="#" class="edit-icon" data-toggle="modal" data-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a></h3>
                                     <h5 class="section-title">Primary</h5>
                                     <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Name</div>
-                                            <div class="text">John Doe</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Relationship</div>
-                                            <div class="text">Father</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Phone </div>
-                                            <div class="text">9876543210, 9876543210</div>
-                                        </li>
-                                    </ul>
-                                    <hr>
-                                    <h5 class="section-title">Secondary</h5>
-                                    <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Name</div>
-                                            <div class="text">Karen Wills</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Relationship</div>
-                                            <div class="text">Brother</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Phone </div>
-                                            <div class="text">9876543210, 9876543210</div>
-                                        </li>
+
                                     </ul>
                                 </div>
                             </div>
@@ -372,22 +178,7 @@
                                 <div class="card-body">
                                     <h3 class="card-title">Bank information</h3>
                                     <ul class="personal-info">
-                                        <li>
-                                            <div class="title">Bank name</div>
-                                            <div class="text">ICICI Bank</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">Bank account No.</div>
-                                            <div class="text">159843014641</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">IFSC Code</div>
-                                            <div class="text">ICI24504</div>
-                                        </li>
-                                        <li>
-                                            <div class="title">PAN No</div>
-                                            <div class="text">TC000Y56</div>
-                                        </li>
+
                                     </ul>
                                 </div>
                             </div>
@@ -397,34 +188,7 @@
                                 <div class="card-body">
                                     <h3 class="card-title">Family Informations <a href="#" class="edit-icon" data-toggle="modal" data-target="#family_info_modal"><i class="fa fa-pencil"></i></a></h3>
                                     <div class="table-responsive">
-                                        <table class="table table-nowrap">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Relationship</th>
-                                                    <th>Date of Birth</th>
-                                                    <th>Phone</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Leo</td>
-                                                    <td>Brother</td>
-                                                    <td>Feb 16th, 2019</td>
-                                                    <td>9876543210</td>
-                                                    <td class="text-right">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a aria-expanded="false" data-toggle="dropdown" class="action-icon dropdown-toggle" href="#"><i class="material-icons">more_vert</i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="#" class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a href="#" class="dropdown-item"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+
                                     </div>
                                 </div>
                             </div>
@@ -442,11 +206,7 @@
                                                     <div class="before-circle"></div>
                                                 </div>
                                                 <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">International College of Arts and Science (UG)</a>
-                                                        <div>Bsc Computer Science</div>
-                                                        <span class="time">2000 - 2003</span>
-                                                    </div>
+
                                                 </div>
                                             </li>
                                             <li>
@@ -454,11 +214,7 @@
                                                     <div class="before-circle"></div>
                                                 </div>
                                                 <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">International College of Arts and Science (PG)</a>
-                                                        <div>Msc Computer Science</div>
-                                                        <span class="time">2000 - 2003</span>
-                                                    </div>
+
                                                 </div>
                                             </li>
                                         </ul>
@@ -476,34 +232,19 @@
                                                 <div class="experience-user">
                                                     <div class="before-circle"></div>
                                                 </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">Web Designer at Zen Corporation</a>
-                                                        <span class="time">Jan 2013 - Present (5 years 2 months)</span>
-                                                    </div>
-                                                </div>
+
                                             </li>
                                             <li>
                                                 <div class="experience-user">
                                                     <div class="before-circle"></div>
                                                 </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">Web Designer at Ron-tech</a>
-                                                        <span class="time">Jan 2013 - Present (5 years 2 months)</span>
-                                                    </div>
-                                                </div>
+
                                             </li>
                                             <li>
                                                 <div class="experience-user">
                                                     <div class="before-circle"></div>
                                                 </div>
-                                                <div class="experience-content">
-                                                    <div class="timeline-content">
-                                                        <a href="#/" class="name">Web Designer at Dalt Technology</a>
-                                                        <span class="time">Jan 2013 - Present (5 years 2 months)</span>
-                                                    </div>
-                                                </div>
+
                                             </li>
                                         </ul>
                                     </div>
@@ -513,8 +254,8 @@
                     </div>
                 </div>
                 <!-- /Profile Info Tab -->
-                
-                <!-- Projects Tab -->
+
+                {{-- <!-- Projects Tab -->
                 <div class="tab-pane fade" id="emp_projects">
                     <div class="row">
                         <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
@@ -579,7 +320,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
                             <div class="card">
                                 <div class="card-body">
@@ -642,7 +383,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
                             <div class="card">
                                 <div class="card-body">
@@ -705,7 +446,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
                             <div class="card">
                                 <div class="card-body">
@@ -769,9 +510,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- /Projects Tab -->
-                
+
                 <!-- Bank Statutory Tab -->
                 <div class="tab-pane fade" id="bank_statutory">
                     <div class="card">
@@ -815,166 +556,12 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <h3 class="card-title"> PF Information</h3>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">PF contribution</label>
-                                            <select class="select">
-                                                <option>Select PF contribution</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">PF No. <span class="text-danger">*</span></label>
-                                            <select class="select">
-                                                <option>Select PF contribution</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Employee PF rate</label>
-                                            <select class="select">
-                                                <option>Select PF contribution</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Additional rate <span class="text-danger">*</span></label>
-                                            <select class="select">
-                                                <option>Select additional rate</option>
-                                                <option>0%</option>
-                                                <option>1%</option>
-                                                <option>2%</option>
-                                                <option>3%</option>
-                                                <option>4%</option>
-                                                <option>5%</option>
-                                                <option>6%</option>
-                                                <option>7%</option>
-                                                <option>8%</option>
-                                                <option>9%</option>
-                                                <option>10%</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Total rate</label>
-                                            <input type="text" class="form-control" placeholder="N/A" value="11%">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Employee PF rate</label>
-                                            <select class="select">
-                                                <option>Select PF contribution</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Additional rate <span class="text-danger">*</span></label>
-                                            <select class="select">
-                                                <option>Select additional rate</option>
-                                                <option>0%</option>
-                                                <option>1%</option>
-                                                <option>2%</option>
-                                                <option>3%</option>
-                                                <option>4%</option>
-                                                <option>5%</option>
-                                                <option>6%</option>
-                                                <option>7%</option>
-                                                <option>8%</option>
-                                                <option>9%</option>
-                                                <option>10%</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Total rate</label>
-                                            <input type="text" class="form-control" placeholder="N/A" value="11%">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <hr>
-                                <h3 class="card-title"> ESI Information</h3>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">ESI contribution</label>
-                                            <select class="select">
-                                                <option>Select ESI contribution</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">ESI No. <span class="text-danger">*</span></label>
-                                            <select class="select">
-                                                <option>Select ESI contribution</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Employee ESI rate</label>
-                                            <select class="select">
-                                                <option>Select ESI contribution</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Additional rate <span class="text-danger">*</span></label>
-                                            <select class="select">
-                                                <option>Select additional rate</option>
-                                                <option>0%</option>
-                                                <option>1%</option>
-                                                <option>2%</option>
-                                                <option>3%</option>
-                                                <option>4%</option>
-                                                <option>5%</option>
-                                                <option>6%</option>
-                                                <option>7%</option>
-                                                <option>8%</option>
-                                                <option>9%</option>
-                                                <option>10%</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Total rate</label>
-                                            <input type="text" class="form-control" placeholder="N/A" value="11%">
-                                        </div>
-                                    </div>
-                                </div>
-                                
+
+
+
+
+
+
                                 <div class="submit-section">
                                     <button class="btn btn-primary submit-btn" type="submit">Save</button>
                                 </div>
@@ -1213,7 +800,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Designation <span class="text-danger">*</span></label>
-                                        
+
                                         <select class="select" id="" name="designation">
                                             <option selected disabled>Select Designation</option>
                                             <option value="Web Designer">Web Designer</option>
@@ -1244,7 +831,7 @@
         </div>
         <!-- /Profile Modal -->
         @endif
-    
+
         <!-- Personal Info Modal -->
         <div id="personal_info_modal" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -1324,7 +911,7 @@
             </div>
         </div>
         <!-- /Personal Info Modal -->
-        
+
         <!-- Family Info Modal -->
         <div id="family_info_modal" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -1369,7 +956,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-body">
                                         <h3 class="card-title">Education Informations <a href="javascript:void(0);" class="delete-icon"><i class="fa fa-trash-o"></i></a></h3>
@@ -1414,7 +1001,7 @@
             </div>
         </div>
         <!-- /Family Info Modal -->
-        
+
         <!-- Emergency Contact Modal -->
         <div id="emergency_contact_modal" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -1458,7 +1045,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="card">
                                 <div class="card-body">
                                     <h3 class="card-title">Primary Contact</h3>
@@ -1499,7 +1086,7 @@
             </div>
         </div>
         <!-- /Emergency Contact Modal -->
-        
+
         <!-- Education Modal -->
         <div id="education_info" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -1560,7 +1147,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-body">
                                         <h3 class="card-title">Education Informations <a href="javascript:void(0);" class="delete-icon"><i class="fa fa-trash-o"></i></a></h3>
@@ -1621,7 +1208,7 @@
             </div>
         </div>
         <!-- /Education Modal -->
-        
+
         <!-- Experience Modal -->
         <div id="experience_info" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -1676,7 +1263,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-body">
                                         <h3 class="card-title">Experience Informations <a href="javascript:void(0);" class="delete-icon"><i class="fa fa-trash-o"></i></a></h3>

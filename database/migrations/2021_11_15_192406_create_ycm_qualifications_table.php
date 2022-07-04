@@ -14,13 +14,13 @@ class CreateYcmQualificationsTable extends Migration
     public function up()
     {
         Schema::create('ycm_qualifications', function (Blueprint $table) {
-            $table->id();
-            $table->string('ycm_id');
-            $table->foreign('ycm_id')->references('rec_id')->on('Employees');
-            $table->string('Insitute');
-            $table->string('course');
-            $table->int('year',4);
-            $table->timestamps();
+             $table->id();
+            // $table->string('ycm_id');
+            // $table->foreign('ycm_id')->references('rec_id')->on('Employees');
+            // $table->string('Insitute');
+            // $table->string('course');
+            // $table->int('year',4);
+            // $table->timestamps();
 
         });
     }

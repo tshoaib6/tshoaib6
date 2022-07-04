@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Traits\LockableTrait;
-use Laratrust\Traits\LaratrustUserTrait;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
-    use LaratrustUserTrait;
-    use HasFactory, Notifiable;
+
+    use HasFactory, Notifiable, HasRoles;
     use LockableTrait;
 
     /**
@@ -20,22 +21,23 @@ class User extends Authenticatable
      *
      * @var array
      */
+    public $guard_name = 'admin';
     protected $fillable = [
-        'name',
+        'name'
+        ,
         'rec_id',
         'email',
         'join_date',
-        'phone_number',
-        'status',
-        'role_name',
-        'email',
-        'role_name',
-        'avatar',
-        'position',
-        'department',
+        // 'phone_number',
+        // 'status',
+        // 'role_name',
+
+        // 'avatar',
+        // 'position',
+        // 'department',
         'password',
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -54,4 +56,34 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function getpermissionGroups()
+    {
+        $permission_groups = DB::table('permissions')
+            ->select('group_name as name')
+            ->groupBy('group_name')
+            ->get();
+        return $permission_groups;
+    }
+
+    public static function getpermissionsByGroupName($group_name)
+    {
+        $permissions = DB::table('permissions')
+            ->select('name', 'id')
+            ->where('group_name', $group_name)
+            ->get();
+        return $permissions;
+    }
+
+    public static function roleHasPermissions($role, $permissions)
+    {
+        $hasPermission = true;
+        foreach ($permissions as $permission) {
+            if (!$role->hasPermissionTo($permission->name)) {
+                $hasPermission = false;
+                return $hasPermission;
+            }
+        }
+        return $hasPermission;
+    }
 }

@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'Asia/Bangkok',
+    'timezone' => 'Asia/Karachi',
 
     /*
     |--------------------------------------------------------------------------
@@ -139,6 +139,7 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
+        App\Providers\ContentServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
@@ -164,7 +165,10 @@ return [
         Brian2694\Toastr\ToastrServiceProvider::class,
         LaravelDaily\Invoices\InvoiceServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
 
         /*
          * Package Service Providers...
@@ -233,7 +237,10 @@ return [
         'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
         'Invoice' => LaravelDaily\Invoices\Facades\Invoice::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        
+        'Excel' => \Matwebsite\Excel\Fascades\Excel::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+
+
 
     ],
 

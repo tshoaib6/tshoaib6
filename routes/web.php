@@ -12,6 +12,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LockScreen;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\ContractsController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\ExpenseReportsController;
 
 
@@ -43,6 +45,8 @@ Route::group(['middleware'=>'auth'],function()
 });
 
 Auth::routes();
+Auth::routes(['verify' => true, 'register' => false]);
+
 
 // ----------------------------- main dashboard ------------------------------//
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -65,8 +69,8 @@ Route::get('lock_screen', [App\Http\Controllers\LockScreen::class, 'lockScreen']
 Route::post('unlock', [App\Http\Controllers\LockScreen::class, 'unlock'])->name('unlock');
 
 // ------------------------------ register ---------------------------------//
-Route::get('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('register');
-Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'storeUser'])->name('register');
+// Route::get('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('register');
+// Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'storeUser'])->name('register');
 
 // ----------------------------- forget password ----------------------------//
 Route::get('forget-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'getEmail'])->name('forget-password');
@@ -81,11 +85,24 @@ Route::get('profile_user', [App\Http\Controllers\UserManagementController::class
 Route::post('profile/information/save', [App\Http\Controllers\UserManagementController::class, 'profileInformation'])->name('profile/information/save');
 
 // ----------------------------- user userManagement -----------------------//
-Route::get('userManagement', [App\Http\Controllers\UserManagementController::class, 'index'])->middleware('auth')->name('userManagement');
+Route::get('userManagement', [App\Http\Controllers\RolesController::class, 'index'])->middleware('auth')->name('userManagement');
+Route::get('/createRole', [App\Http\Controllers\RolesController::class, 'create'])->middleware('auth')->name('createRole');
+Route::get('/role/edit/{id}', [App\Http\Controllers\RolesController::class,'edit'])->middleware('auth');
+Route::put('/role/update/{id}', [App\Http\Controllers\RolesController::class, 'update']);
+Route::get('/user/edit/{id}', [App\Http\Controllers\UserManagementController::class,'edit'])->middleware('auth');
+Route::put('/user/update/{id}', [App\Http\Controllers\UserManagementController::class, 'update']);
+
+Route::post('/role/save', [App\Http\Controllers\RolesController::class, 'store'])->name('role/save');
+
+Route::get('/users', [App\Http\Controllers\UserManagementController::class, 'index'])->middleware('auth');
+Route::get('/createuser', [App\Http\Controllers\UserManagementController::class, 'createuser'])->middleware('auth');
+Route::post('/storeuser', [App\Http\Controllers\UserManagementController::class, 'store']);
+Route::delete('user/delete/{id}', [App\Http\Controllers\UserManagementController::class, 'destroy'])->middleware('auth');
+
 Route::post('user/add/save', [App\Http\Controllers\UserManagementController::class, 'addNewUserSave'])->name('user/add/save');
 Route::post('search/user/list', [App\Http\Controllers\UserManagementController::class, 'searchUser'])->name('search/user/list');
 Route::post('update', [App\Http\Controllers\UserManagementController::class, 'update'])->name('update');
-Route::post('user/delete', [App\Http\Controllers\UserManagementController::class, 'delete'])->middleware('auth')->name('user/delete');
+Route::delete('role/delete/{id}', [App\Http\Controllers\RolesController::class, 'destroy'])->middleware('auth');
 Route::get('activity/log', [App\Http\Controllers\UserManagementController::class, 'activityLog'])->middleware('auth')->name('activity/log');
 Route::get('activity/login/logout', [App\Http\Controllers\UserManagementController::class, 'activityLogInLogOut'])->middleware('auth')->name('activity/login/logout');
 
@@ -102,22 +119,49 @@ Route::get('form/job/view', [App\Http\Controllers\JobController::class, 'jobView
 
 // ----------------------------- form employee ------------------------------//
 Route::get('all/employee/card', [App\Http\Controllers\EmployeeController::class, 'cardAllEmployee'])->middleware('auth')->name('all/employee/card');
+Route::get('all/employee/ycmform', [App\Http\Controllers\EmployeeController::class, 'ycmform'])->middleware('auth')->name('ycmform');
+
 Route::get('all/employee/list', [App\Http\Controllers\EmployeeController::class, 'listAllEmployee'])->middleware('auth')->name('all/employee/list');
 Route::post('all/employee/save', [App\Http\Controllers\EmployeeController::class, 'saveRecord'])->middleware('auth')->name('all/employee/save');
+Route::get('all/employee/addycmform', [App\Http\Controllers\EmployeeController::class, 'Addycmform'])->middleware('auth')->name('all/employee/addform');
 Route::get('all/employee/view/edit/{employee_id}', [App\Http\Controllers\EmployeeController::class, 'viewRecord'])->middleware('auth');
+Route::get('/edit/ycm/{id}', [App\Http\Controllers\EmployeeController::class, 'editycm'])->middleware('auth');
+Route::put('/ycm/update/{id}', [App\Http\Controllers\EmployeeController::class, 'updateycm']);
+Route::delete('/ycm/destroy/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy']);
+
+Route::get('/ycmtasks', [App\Http\Controllers\EmployeeController::class, 'ycmtask'])->middleware('auth');
+Route::get('/ycmformpdf/{id}', [App\Http\Controllers\PdfController::class, 'getycmForm'])->middleware('auth');
+
+Route::get('/ycmtasks/assignform/{id}', [App\Http\Controllers\EmployeeController::class, 'assigntaskform'])->middleware('auth');
+
+Route::post('savetask/{id}', [App\Http\Controllers\EmployeeController::class, 'storetask'])->middleware('auth');
+
+Route::get('all/employee/contract/{employee_id}', [App\Http\Controllers\ContractsController::class, 'OfferContract'])->middleware('auth');
+// Route::get('/employee/viewPdf/{employee_id}', [App\Http\Controllers\EmployeeController::class, 'viewPDF'])->middleware('auth');
+Route::get('/employeesalary', [App\Http\Controllers\SalaryController::class, 'salary'])->middleware('auth');
+Route::get('/contractedit', [App\Http\Controllers\ContractController::class, 'edit'])->middleware('auth');
+
 Route::post('all/employee/update', [App\Http\Controllers\EmployeeController::class, 'updateRecord'])->middleware('auth')->name('all/employee/update');
 Route::get('all/employee/delete/{employee_id}', [App\Http\Controllers\EmployeeController::class, 'deleteRecord'])->middleware('auth');
 Route::post('all/employee/search', [App\Http\Controllers\EmployeeController::class, 'employeeSearch'])->name('all/employee/search');
 Route::post('all/employee/list/search', [App\Http\Controllers\EmployeeController::class, 'employeeListSearch'])->name('all/employee/list/search');
+Route::get('all/employee/contractedYcm', [App\Http\Controllers\EmployeeController::class, 'showContracted'])->name('all/employee/contracredYcm');
+Route::get('export-contactlist', [App\Http\Controllers\EmployeeController::class,'exportIntoExcel'])->name('exportContacts');
+
+Route::get('contracts/all', [App\Http\Controllers\ContractsController::class, 'AllContracts'])->name('contracts/all');
+Route::post('contracts/save/{employee_id}', [App\Http\Controllers\ContractsController::class, 'saveContract'])->middleware('auth');
+Route::get('contracts/view/{employee_id}', [App\Http\Controllers\ContractsController::class, 'viewContracts']);
+Route::get('contracts/edit/{employee_id}', [App\Http\Controllers\ContractsController::class, 'editContract']);
+Route::put('contracts/edit/update/{employee_id}', [App\Http\Controllers\ContractsController::class, 'updateContract']);
+
+Route::post('contract/search', [App\Http\Controllers\ContractsController::class, 'contractSearch']);
+
 
 // ----------------------------- profile employee ------------------------------//
 Route::get('employee/profile/{rec_id}', [App\Http\Controllers\EmployeeController::class, 'profileEmployee'])->middleware('auth');
 
 
-// ----------------------------- form holiday ------------------------------//
-Route::get('form/holidays/new', [App\Http\Controllers\HolidayController::class, 'holiday'])->middleware('auth')->name('form/holidays/new');
-Route::post('form/holidays/save', [App\Http\Controllers\HolidayController::class, 'saveRecord'])->middleware('auth')->name('form/holidays/save');
-Route::post('form/holidays/update', [App\Http\Controllers\HolidayController::class, 'updateRecord'])->middleware('auth')->name('form/holidays/update');
+
 
 // ----------------------------- form leaves ------------------------------//
 Route::get('form/leaves/new', [App\Http\Controllers\LeavesController::class, 'leaves'])->middleware('auth')->name('form/leaves/new');
@@ -134,7 +178,7 @@ Route::get('form/shiftscheduling/page', [App\Http\Controllers\LeavesController::
 Route::get('form/shiftlist/page', [App\Http\Controllers\LeavesController::class, 'shiftList'])->middleware('auth')->name('form/shiftlist/page');
 
 // ----------------------------- form payroll  ------------------------------//
-Route::get('form/salary/page', [App\Http\Controllers\PayrollController::class, 'salary'])->middleware('auth')->name('form/salary/page');
+Route::get('form/salary/page', [App\Http\Controllers\PayrollController::class, 'salary']);
 Route::post('form/salary/save', [App\Http\Controllers\PayrollController::class, 'saveRecord'])->middleware('auth')->name('form/salary/save');
 Route::post('form/salary/update', [App\Http\Controllers\PayrollController::class, 'updateRecord'])->middleware('auth')->name('form/salary/update');
 Route::post('form/salary/delete', [App\Http\Controllers\PayrollController::class, 'deleteRecord'])->middleware('auth')->name('form/salary/delete');
@@ -150,4 +194,10 @@ Route::get('form/leave/reports/page', [App\Http\Controllers\ExpenseReportsContro
 
 
 Route::get('generate-pdf', [App\Http\Controllers\HomeController::class, 'generatePDF'])->name('generate-pdf');
+
+Route::get('salary/paid', [App\Http\Controllers\SalaryController::class, 'paidycm']);
+
+Route::get('salary/detail/{ycm_id}', [App\Http\Controllers\SalaryController::class, 'BankDetail']);
+
+Route::get('salary/detail/addbank/{ycm_id}', [App\Http\Controllers\SalaryController::class, 'BankDetailForm']);
 

@@ -16,7 +16,6 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('rec_id');
             $table->string('email')->unique();
             $table->string('join_date')->unique();
             $table->string('phone_number')->nullable();
@@ -31,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
     }
-    
+
 
     /**
      * Reverse the migrations.
