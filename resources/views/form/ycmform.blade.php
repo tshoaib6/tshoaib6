@@ -20,13 +20,13 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label class="col-form-label ">Upload Picture</label>
-                <input class="form-control  @error('name') is-invalid @enderror " type="file" id="avatar" name="avatar" placeholder="Upload Picture" value="default.jpeg">
+                <input class="form-control " type="file" id="avatar" name="avatar" placeholder="Upload Picture" value="default.jpeg">
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-form-label ">First Name </label>
+                    <label class="col-form-label ">First Name  <span class="text-danger">*</span> </label>
                     <input class="form-control  @error('name') is-invalid @enderror " type="text" id="name" name="name" placeholder="First Name" value="{{old('name')}}">
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Last Name</label>
+                    <label class="col-form-label">Last Name  <span class="text-danger">*</span></label>
                     <input class="form-control @error('name') is-invalid @enderror " type="text" id="name" name="lname" placeholder="Last Name" value="{{old('lname')}}">
 
                 </div>
@@ -43,7 +43,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Cnic</label>
+                    <label class="col-form-label">Cnic  <span class="text-danger">*</span></label>
                     <input class="form-control @error('cnic') is-invalid @enderror " type="text" id="name" name="cnic" placeholder="Cnic" value="{{old('cnic')}}">
 
                 </div>
@@ -51,7 +51,7 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Birth Date</label>
+                    <label>Birth Date  <span class="text-danger">*</span></label>
                     <div class="cal-icon">
                         <input class="form-control datetimepicker @error('birthDate') is-invalid @enderror " type="text" id="birthDate" name="birthDate" value="{{old('birthDate')}}">
                     </div>
@@ -61,7 +61,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
 
-                    <label class="col-form-label">Address</label>
+                    <label class="col-form-label">Address  <span class="text-danger">*</span></label>
                     <input class="form-control @error('address') is-invalid @enderror " type="text" id="address" name="address" placeholder="Address" value="{{old('address')}}">
 
                 </div>
@@ -69,9 +69,9 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">City </label>
+                    <label class="col-form-label">City  <span class="text-danger">*</span></label>
                     {{-- <input class="form-control @error('city') is-invalid @enderror" type="text" id="city" name="city" placeholder="City" value="{{old('city')}}"> --}}
-                    <select  class="select form-control" name="city" id="Location" required>
+                    <select  class="select form-control" name="city" id="Location" required value="{{old('city')}}">
                         <option value="" disabled selected>Select The City</option>
                         <option value="Islamabad">Islamabad</option>
                         <option value="Rawalpindi">Rawalpindi</option>
@@ -323,9 +323,9 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Country</label>
+                    <label class="col-form-label">Country  <span class="text-danger">*</span></label>
                     {{-- <input class="form-control @error('country') is-invalid @enderror" type="text" id="country" name="country" placeholder="Country" value="{{old('country')}}"> --}}
-                    <select class="select form-control" id="country" name="country" class="form-control">
+                    <select class="select form-control" id="country" name="country" value="{{old('country')}}" class="form-control">
                         <option value="" disabled selected>Select The City</option>
 
                     <option value="Pakistan">Pakistan</option>
@@ -578,7 +578,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Phone No</label>
+                    <label class="col-form-label">Phone No  <span class="text-danger">*</span> </label>
                     <input class="form-control @error('phno') is-invalid @enderror" type="text" id="phno" name="phno" placeholder="Phone Number" value="{{old('phno')}}">
 
                 </div>
@@ -594,7 +594,7 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Gender</label>
+                    <label>Gender  <span class="text-danger">*</span></label>
                     <select class="select form-control @error('gender') is-invalid @enderror" style="width: 100%;" tabindex="-1" aria-hidden="true" id="gender" name="gender" value="{{old('gender')}}">
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -626,7 +626,7 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Qualifications</label>
+                    <label>Qualifications  <span class="text-danger">*</span> </label>
                     <select class="select form-control @error('qualification') is-invalid @enderror" style="width: 100%;" tabindex="-1" aria-hidden="true" id="qualification" name="qualification">
                         <option value="male">Doctrate</option>
                         <option value="female">Master</option>
@@ -660,7 +660,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-form-label">Field Of Study</label>
+                    <label class="col-form-label">Field Of Study </label>
                     <input class="form-control @error('qu_fod') is-invalid @enderror" type="text" id="qu_fod" name="qu_fod" placeholder="Field Of Study" value="{{old('qu_fod')}}">
                 </div>
             </div>
@@ -764,23 +764,38 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Number of Months Served as YC Volunteer</label>
+                    <label class="col-form-label">Number of Months Served as YC Volunteer  </label>
                     <input class="form-control @error('volunteer') is-invalid @enderror "  type="text" id="volunteer" name="volunteer" placeholder="Volunteer" value="{{old('volunteer')}}">
 
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="form-group">
+                {{-- <div class="form-group">
 
-                    <label class="col-form-label">Designation</label>
+                    <label class="col-form-label">Designation  <span class="text-danger">*</span> </label>
                     <input class="form-control @error('Desgination') is-invalid @enderror"  type="text" id="Desgination" name="Desgination" placeholder="Desgination" value="{{old('Desgination')}}">
 
+                </div> --}}
+
+                <div class="form-group">
+                    <label class="col-form-label">Designation  <span class="text-danger">*</span> </label>
+                    <select class="select @error('Desgination') is-invalid @enderror"  type="text" id="Desgination" name="Desgination" placeholder="Desgination" value="{{old('Desgination')}}">
+                        <option selected disabled>-- Select Designation --</option>
+                        @foreach ($dept as $name)
+                            <option value="{{ $name->department }}">{{ $name->department }}</option>
+                        @endforeach
+                    </select>
+                    @error('role_name')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label"> YC Chapter</label>
+                    <label class="col-form-label"> YC Chapter  <span class="text-danger">*</span></label>
                     <input class="form-control  @error('Chapter') is-invalid @enderror" type="text" id="Chapter"  name="Chapter" placeholder="Chapter" value="{{old('Chapter')}}">
 
                 </div>

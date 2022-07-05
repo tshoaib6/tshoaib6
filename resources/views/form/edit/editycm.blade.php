@@ -14,7 +14,6 @@
 <div style=" background-color:	#800000;">
     <h1 style="color: white; font-size:30px;">Basic Info</h1>
 </div>
-@include('errors.messages')
 <form enctype="multipart/form-data" action="/ycm/update/{{$employees[0]->id}}" method="POST">
     @method('PUT')
     @csrf
@@ -33,7 +32,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-form-label ">First Name </label>
+                    <label class="col-form-label ">First Name <span class="text-danger">*</span></label>
                     <input class="form-control" type="text" id="name" name="name" placeholder="First Name" value="{{$employees[0]->name}}">
 
                 </div>
@@ -42,7 +41,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Last Name</label>
+                    <label class="col-form-label">Last Name <span class="text-danger">*</span></label>
                     <input class="form-control  " type="text" id="name" name="lname" placeholder="Last Name"  value="{{$employees[0]->lname}}">
 
                 </div>
@@ -50,7 +49,7 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Birth Date</label>
+                    <label>Birth Date <span class="text-danger">*</span></label>
                     <div class="cal-icon">
                         <input class="form-control" type="text" id="birthDate" name="birthDate" value="{{$employees[0]->birth_date}}">
                     </div>
@@ -69,7 +68,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
 
-                    <label class="col-form-label">Address</label>
+                    <label class="col-form-label">Address<span class="text-danger">*</span></label>
                     <input class="form-control  " type="text" id="address" name="address" placeholder="Address" value="{{$employees[0]->address}}" >
 
                 </div>
@@ -77,7 +76,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">City </label>
+                    <label class="col-form-label">City <span class="text-danger">*</span></label>
                     <input class="form-control @error('city') is-invalid @enderror" type="text" id="city" name="city" placeholder="City"  value="{{$employees[0]->city}}">
 
                 </div>
@@ -85,7 +84,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Country</label>
+                    <label class="col-form-label">Country<span class="text-danger">*</span></label>
                     <input class="form-control " type="text" id="country" name="country" placeholder="Country" value="{{$employees[0]->country}}">
 
                 </div>
@@ -94,7 +93,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
 
-                    <label class="col-form-label">Phone No</label>
+                    <label class="col-form-label">Phone No <span class="text-danger">*</span></label>
                     <input class="form-control " type="text" id="phno" name="phno" placeholder="Phone Number" value="{{$employees[0]->phone_no}}">
 
                 </div>
@@ -110,7 +109,7 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Gender</label>
+                    <label>Gender <span class="text-danger">*</span></label>
                     <select class="select form-control @error('gender') is-invalid @enderror" style="width: 100%;" tabindex="-1" aria-hidden="true" id="gender" name="gender" value="{{$employees[0]->gender}}">
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -140,7 +139,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Qualifications</label>
+                    <label>Qualifications <span class="text-danger">*</span></label>
                     <input class="form-control"  type="text" style="width: 100%;" tabindex="-1" aria-hidden="true" id="gender" name="gender"  value="{{$employees[0]->qualification}}" >
 
                 </div>
@@ -231,14 +230,14 @@
     <div class="col-sm-6">
         <div class="form-group">
 
-            <label class="col-form-label">Designation</label>
+            <label class="col-form-label">Designation <span class="text-danger">*</span></label>
             <input class="form-control" type="text" id="Desgination" name="Desgination" placeholder="Desgination"  value="{{$employees[0]->designation}}">
 
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <label class="col-form-label"> YC Chapter</label>
+            <label class="col-form-label"> YC Chapter <span class="text-danger">*</span></label>
             <input class="form-control" type="text" id="Chapter" name="Chapter" placeholder="Chapter"  value="{{$employees[0]->name}}">
 
         </div>

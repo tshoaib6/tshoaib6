@@ -17,10 +17,10 @@ class CreateDawahExpsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('ycm_id');
             //  $table->foreign('ycm_id')->references('id');
-            $table->string('Insitute');
-            $table->string('posistion');
-            $table->string('from_date');
-            $table->string('to_date');
+            $table->string('Insitute')->nullable();
+            $table->string('posistion')->nullable();
+            $table->string('from_date')->nullable();
+            $table->string('to_date')->nullable();
             $table->timestamps();
         });
     }

@@ -35,7 +35,7 @@
                         </p>
                     </div>
         
-                    <form action="{{ url('contracts/save/'.$employees->id) }}" method="POST">
+                    <form action="" method="POST">
                         @csrf
                         <div class="subject form-group form-inline">
                             <label >Subject : </label>
@@ -50,7 +50,7 @@
         
                         <div class="subject form-group form-inline">
                             <label for="exampleInputEmail1">Mr./Ms   </label>
-                            <input type="text" class="form-control" readonly name="name" style="margin-left:5px;"placeholder="Name"  value="{{$employees->name ." ".$employees->lname }}">
+                            <input type="text" class="form-control" readonly name="name" style="margin-left:5px;"placeholder="Name">
         
                         </div>
         
@@ -61,12 +61,12 @@
                                 notification through your immediate head. Kindly refer to YC leave policies for further information.
                                 
                                 <br> <br> 
-                                Please note that there is a 3-month probation period, from <span form-group form-inline> <input  class='input-style 'id="pdatefrom"  type="text" name="probabtion_from"  size="10"> </span> to <span form-group form-inline> <input  class="input-style" id="pdateto" type="text" name="probabtion_until"  size="10"> </span>. Your contract will officially start after the probation period subject to approval. You will be eligible to apply for
+                                Please note that there is a <b>3-month probation period </b>, from <span form-group form-inline> <input  class='input-style 'id="pdatefrom"  type="text" name="probabtion_from"  size="10"> </span> to <span form-group form-inline> <input  class="input-style" id="pdateto" type="text" name="probabtion_until"  size="10"> </span>. Your contract will officially start after the probation period subject to approval. You will be eligible to apply for
                                 renewal of contract a month before your contract expires. Please note that approval of
                                 contract will be subject to your previous performance, evaluation and as approved by the authorities. Your job description is as
                                 follows:
                                 <br> <br>
-                                Your salary for this post will be Rs. <span form-group form-inline> <input class="input-style @error('salary') is-invalid @enderror" type="text" name="salary" id="position" size="5"> </span> per month. There are no other entitlements with this appointment. You will report to and take your instructions from <b> Head of Department </b> and <b> Regional Director/Country Manager </b> from time to time.
+                                 You will report to and take your instructions from <b> Head of Department </b> and <b> Regional Director/Country Manager </b> from time to time.
                                 Management has the right to expel immediately any employee without giving any reason or any prior notice in the lager interest of the Youth Club Trust and YCM. Therefore this contract can be <b>discontinued</b> at any time <b>without any prior notice </b> .<br> <br>
                                 As a Youth Club Trust employee we expect that you will do your utmost to safeguard the interests of the
                                 organization and diligently maintain excellence in moral and ethical standards, as outlined in our

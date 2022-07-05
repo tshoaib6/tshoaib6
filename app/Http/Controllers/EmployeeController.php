@@ -68,7 +68,9 @@ class  EmployeeController extends Controller
         if (is_null($this->user) || !$this->user->can('YCM.create')) {
             abort(403, 'Sorry !! You are Unauthorized !');
         }
-        return view('form.ycmform');
+        $dept = DB::table('departments')->get();
+
+        return view('form.ycmform',compact('dept'));
     }
     // save data employee
     public function saveRecord(Request $request)
@@ -80,29 +82,15 @@ class  EmployeeController extends Controller
         $request->validate([
             'name'        => 'required|string|max:50|min:3',
             'lname'       => 'required|string|max:50|min:3',
-            'address'       => 'required|max:50|min:3',
+            'address'       => 'required|max:100|min:3',
             'city'       => 'required|max:50|min:3',
             'country'       => 'required|max:50|min:3',
             'phno'       => 'required|numeric',
-            'whatsappNo'    =>'required|numeric',
             'email'       => 'required|string|email',
-            'birthDate'   => 'required|before:today',
+            'birthDate'   => 'required',
             'gender'      => 'required',
-            'martial'      => 'required',
-            'qu_insitute' =>'required|string',
-            'qu_course' =>'required|string',
-            'qu_year' =>'required|numeric|min:4',
-            'qu_fod' =>'required|string',
-            "job_position.*" => 'max:50|min:3',
-            "job_instituion.*" => 'max:50|min:3',
-            "job_from.*" => '|before:today',
-             "job_to.*" => '|before:today',
-             "dawah_position.*" => 'max:50|min:3',
-            "dawah_institute.*" => 'max:50',
-            "dawah_from.*" => '|before:today',
-            "dawah_to.*" =>'|before:today',
             "volunteer" =>'required',
-            "Desgination" => 'required|max:50|min:3',
+            "Desgination" => 'required',
             "Chapter" => 'required|max:50|min:3',
         ], );
 
@@ -221,25 +209,13 @@ public function updateycm(Request $request, $id){
         'name'        => 'required|string|max:50|min:3',
         // 'cnic'        => 'required|string|max:13|min:13',
         'lname'       => 'required|string|max:50|min:3',
-        'address'       => 'required|max:50|min:3',
+        'address'       => 'required|min:3',
         'city'       => 'required|max:50|min:3',
         'country'       => 'required|max:50|min:3',
         'phno'       => 'required|numeric',
         'whatsappNo'    =>'required|numeric',
         'email'       => 'required|string|email',
         'birthDate'   => 'required|before:today',
-        'martial'      => 'required',
-        "Islamic_institute.*" => 'max:50',
-        "Islamic_course.*" => 'max:50',
-        "Islamic_year.*" => 'date_format:Y-m-d|before:today',
-        "job_position.*" => 'max:50|min:3',
-        "job_instituion.*" => 'max:50|min:3',
-        "job_from.*" => 'date_format:Y-m-d|before:today',
-         "job_to.*" => 'date_format:Y-m-d|before:today',
-         "dawah_position.*" => 'max:50|min:3',
-        "dawah_institute.*" => 'max:50',
-        "dawah_from.*" => 'date_format:Y-m-d|before:today',
-        "dawah_to.*" =>'date_format:Y-m-d|before:today',
         "volunteer" =>'required',
         "Desgination" => 'required|max:50|min:3',
         "Chapter" => 'required|max:50|min:3',

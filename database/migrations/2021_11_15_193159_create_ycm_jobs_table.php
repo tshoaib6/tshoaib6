@@ -17,10 +17,10 @@ class CreateYcmJobsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('ycm_id');
             // $table->foreign('ycm_id')->references('id');
-            $table->string('Insitute');
-            $table->string('posistion');
-            $table->string('Join_date');
-            $table->string('End_date');
+            $table->string('Insitute')->nullable();
+            $table->string('posistion')->nullable();
+            $table->string('Join_date')->nullable();
+            $table->string('End_date')->nullable();
             $table->timestamps();
         });
     }

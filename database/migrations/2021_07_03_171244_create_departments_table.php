@@ -19,6 +19,27 @@ class CreateDepartmentsTable extends Migration
             $table->timestamps();
         });
 
+        DB::table('departments')->insert([
+            ['department' => 'Events'],
+            ['department' => 'PR'],
+            ['department' => 'Social Welfare'],
+            ['department' => 'Street/Campus'],
+            ['department' => 'UMatter'],
+            ['department' => 'Courses'],
+            ['department' => 'Halqas'],
+            ['department' => 'Voluteers'],
+
+
+
+
+
+
+
+
+
+            
+            
+        ]);
     }
 
     /**

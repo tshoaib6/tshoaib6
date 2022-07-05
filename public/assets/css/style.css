@@ -2495,6 +2495,9 @@ body {
     font-weight: 600;
     min-width: 200px;
     padding: 10px 20px;
+	background-color: #ff8c00;
+	color: black;
+	border: 0px;
 }
 .form-scroll {
     max-height: 400px;
@@ -8640,10 +8643,7 @@ ul.comment-list li ul.children {
     float: right;
 }
 
-.letter-header{
-    margin-top:100px;
-    margin-left: 20px;
-}
+
 .letter-header p{
     display: inline;
 }
@@ -8655,6 +8655,7 @@ ul.comment-list li ul.children {
     margin-left: 20px;
     margin-top: 20px;
 }
+
 
 
 
